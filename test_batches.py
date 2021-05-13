@@ -1,6 +1,6 @@
 import pytest
 from datetime import date
-from model import Batch, OrderLine
+from model import Batch, OrderLine, allocate
 
 
 def test_allocating_to_a_batch_reduces_the_available_quantity():
@@ -41,7 +41,16 @@ def test_cannot_allocate_to_batch_if_skus_do_not_match():
     assert batch.can_allocate(line) is False
 
 
-def test_allocation_is_idempotent():
-    batch, line = make_batch_and_line("ELEGANT-LAMP", 20, 2)
-    pass
+def test_can_only_deallocate_allocated_lines():
+    batch, unallocated_line = make_batch_and_line("DECORATIVE-TRINKET", 20, 2)
+    batch.deallocate(unallocated_line)
+    # assert deallocating from line only has effect if batch previously allocated the line
+    assert batch.available_quantity == 20
 
+
+def test_allocation_is_idempotent():
+    # assert that cannot allocate the same line twice
+    batch, line = make_batch_and_line("ANGULAR-DESK", 20, 2)
+    batch.allocate(line)
+    batch.allocate(line)
+    assert batch.available_quantity == 18
