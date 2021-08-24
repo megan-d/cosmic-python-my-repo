@@ -1,18 +1,16 @@
-import pytest
 from datetime import date
-from model import Batch, OrderLine, allocate
+from model import Batch, OrderLine
 
 
 def test_allocating_to_a_batch_reduces_the_available_quantity():
     batch = Batch("batch-001", "SMALL-TABLE", qty=20, eta=date.today())
     line = OrderLine("order-ref", "SMALL-TABLE", 2)
-
     batch.allocate(line)
 
     assert batch.available_quantity == 18
 
 
-# Helper function to create a batch and line for a given sku
+# Helper function to create a Batch and OrderLine for a given sku
 def make_batch_and_line(sku, batch_qty, line_qty):
     return (
         Batch("batch-001", sku, batch_qty, eta=date.today()),

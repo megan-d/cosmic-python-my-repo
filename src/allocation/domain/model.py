@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Optional, List, Set
 
 
-# OrderLine is a value object - a domain object that is uniquely identified by the data it holds - data but no identity
+# OrderLine is a value object - a domain object that is uniquely identified by the data it holds (rather than unique id)
 @dataclass(frozen=True)
 class OrderLine:
     orderid: str
@@ -22,10 +22,11 @@ class Batch:
         self.eta = eta
         self._purchased_quantity = qty
         # batch keeps track of set of allocated OrderLine objects
-        # when we allocate (if enough available quantity), we add to the set
+        # when we allocate an OrderLine to a batch (if enough available quantity), we add to the set
         self._allocations = set()  # type: Set[OrderLine]
 
-    # magic method that defines behavior of class for the == operator
+    # magic method that defines behavior of class for the == operator when comparing
+    # this means that it's only looking at the reference
     def __eq__(self, other):
         if not isinstance(other, Batch):
             return False

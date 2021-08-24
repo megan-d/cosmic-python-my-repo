@@ -1,5 +1,4 @@
-import pytest
-import model
+from allocation.domain import model
 
 
 def test_orderline_mapper_can_load_lines(session):
@@ -14,7 +13,7 @@ def test_orderline_mapper_can_load_lines(session):
         model.OrderLine("order1", "RED-TABLE", 13),
         model.OrderLine("order2", "BLUE-LIPSTICK", 14)
     ]
-    assert session.query(model.OrderLine).all() ==expected
+    assert session.query(model.OrderLine).all() == expected
 
 
 def test_orderline_mapper_can_save_lines(session):
