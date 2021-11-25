@@ -1,6 +1,6 @@
 import pytest
 from datetime import date, timedelta
-from allocation.domain.model import Batch, OrderLine, allocate, OutOfStock
+from src.allocation.domain.model import Batch, OrderLine, allocate, OutOfStock
 
 
 today = date.today()
@@ -29,7 +29,7 @@ def test_prefers_earlier_batches():
 
     assert earliest.available_quantity == 90
     assert medium.available_quantity == 100
-    assert latest.available_quantity ==100
+    assert latest.available_quantity == 100
 
 
 def test_returns_allocated_batch_ref():

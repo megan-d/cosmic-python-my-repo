@@ -1,5 +1,5 @@
-from allocation.domain import model
-from allocation.adapters import repository
+from src.allocation.domain import model
+from src.allocation.adapters import repository
 
 
 # Repository test for saving an object

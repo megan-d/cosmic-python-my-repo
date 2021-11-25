@@ -1,9 +1,9 @@
-from allocation.domain import model
+from src.allocation.domain import model
 
 
 def test_orderline_mapper_can_load_lines(session):
     session.execute(
-        'INSERT INTO order_lines (orderid, sku, qty) VALUES '
+        "INSERT INTO order_lines (orderid, sku, qty) VALUES "
         '("order1", "RED-CHAIR", 12)'
         '("order1", "RED-TABLE", 13)'
         '("order2", "BLUE-LIPSTICK", 14)'
@@ -11,7 +11,7 @@ def test_orderline_mapper_can_load_lines(session):
     expected = [
         model.OrderLine("order1", "RED-CHAIR", 12),
         model.OrderLine("order1", "RED-TABLE", 13),
-        model.OrderLine("order2", "BLUE-LIPSTICK", 14)
+        model.OrderLine("order2", "BLUE-LIPSTICK", 14),
     ]
     assert session.query(model.OrderLine).all() == expected
 
