@@ -33,6 +33,14 @@ allocations = Table(
 )
 
 
+products = Table(
+    "products",
+    metadata,
+    Column("sku", String(255), primary_key=True),
+    Column("version_number", Integer, nullable=False, server_default="0"),
+)
+
+
 def start_mappers():
     lines_mapper = mapper(model.OrderLine, order_lines)
     mapper(

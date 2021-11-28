@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 
 from src.allocation import config
 from src.allocation.adapters import repository
+from src.allocation.domain import model
 
 
 DEFAULT_SESSION_FACTORY = sessionmaker(
@@ -15,8 +16,18 @@ DEFAULT_SESSION_FACTORY = sessionmaker(
 )
 
 
+class AbstractRepository(abc.ABC):
+    @abc.abstractmethod
+    def add(self, product: model.Product):
+        ...
+
+    @abc.abstractmethod
+    def get(self, sku) -> model.Product:
+        ...
+
+
 class AbstractUnitOfWork(abc.ABC):
-    batches: repository.AbstractRepository
+    products: repository.AbstractRepository
 
     def __exit__(self, *args):
         self.rollback()
@@ -36,7 +47,7 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
 
     def __enter__(self):
         self.session = self.session_factory()
-        self.batches = repository.SqlAlchemyRepository(self.session)
+        self.products = repository.SqlAlchemyRepository(self.session)
         return super().__enter__()
 
     def __exit__(self, *args):
@@ -48,3 +59,6 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
 
     def rollback(self):
         self.session.rollback()
+
+    def was_deleted(self, obj):
+        self.session.was_deleted(obj)

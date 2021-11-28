@@ -67,17 +67,3 @@ def test_commits():
     services.add_batch("batch1", "COMPLICATED-LAMP", 100, None, uow)
     services.allocate("o1", "COMPLICATED-LAMP", 10, uow)
     assert uow.committed
-
-
-# def test_prefers_warehouse_batches_to_shipments():
-#     in_stock_batch = model.Batch("in-stock-batch", "RETRO-CLOCK", 100, eta=None)
-#     shipment_batch = model.Batch("shipment-batch", "RETRO-CLOCK", 100, eta=tomorrow)
-#     repo = FakeRepository([in_stock_batch, shipment_batch])
-#     session = FakeSession
-
-#     line = model.OrderLine("oref", "RETRO-CLOCK", 10)
-
-#     services.allocate(line, [in_stock_batch, shipment_batch])
-
-#     assert in_stock_batch.available_quantity == 90
-#     assert shipment_batch.available_quantity == 100
