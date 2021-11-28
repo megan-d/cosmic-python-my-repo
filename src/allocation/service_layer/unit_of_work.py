@@ -12,6 +12,7 @@ from src.allocation.domain import model
 DEFAULT_SESSION_FACTORY = sessionmaker(
     bind=create_engine(
         config.get_postgres_uri(),
+        isolation_level="REPEATABLE READ",
     )
 )
 
@@ -28,6 +29,9 @@ class AbstractRepository(abc.ABC):
 
 class AbstractUnitOfWork(abc.ABC):
     products: repository.AbstractRepository
+
+    def __enter__(self):
+        return self
 
     def __exit__(self, *args):
         self.rollback()
@@ -46,7 +50,7 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
         self.session_factory = session_factory
 
     def __enter__(self):
-        self.session = self.session_factory()
+        self.session = self.session_factory()  # type: Session
         self.products = repository.SqlAlchemyRepository(self.session)
         return super().__enter__()
 
@@ -59,6 +63,3 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
 
     def rollback(self):
         self.session.rollback()
-
-    def was_deleted(self, obj):
-        self.session.was_deleted(obj)

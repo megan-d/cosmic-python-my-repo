@@ -9,7 +9,7 @@ services:
       - postgres
     environment:
       - DB_HOST=postgres
-      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_PASSWORD=abc123
       - API_HOST=app
       - PYTHONDONTWRITEBYTECODE=1
     volumes:
@@ -22,10 +22,10 @@ services:
   postgres:
     image: postgres:9.6
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    restart: always
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - POSTGRES_USER=allocation
+      - POSTGRES_PASSWORD=abc123
+    # restart: always
+    # volumes:
+    #   - ./postgres-data:/var/lib/postgresql/data
     ports:
       - "54321:5432"

@@ -3,16 +3,16 @@ from dataclasses import dataclass
 from typing import Optional, List, Set
 
 
+class OutOfStock(Exception):
+    pass
+
+
 # OrderLine is a value object - a domain object that is uniquely identified by the data it holds (rather than unique id)
-@dataclass(frozen=True)
+@dataclass(unsafe_hash=True)
 class OrderLine:
     orderid: str
     sku: str
     qty: int
-
-
-class OutOfStock(Exception):
-    pass
 
 
 class Batch:
@@ -66,14 +66,16 @@ class Batch:
 
 
 class Product:
-    def __init__(self, sku: str, batches: List[Batch]):
+    def __init__(self, sku: str, batches: List[Batch], version_number: int = 0):
         self.sku = sku
         self.batches = batches
+        self.version_number = version_number
 
     def allocate(self, line: OrderLine) -> str:
         try:
             batch = next(b for b in sorted(self.batches) if b.can_allocate(line))
             batch.allocate(line)
+            self.version_number += 1
             return batch.reference
         except StopIteration:
             raise OutOfStock(f"Out of stock for sku {line.sku}")
