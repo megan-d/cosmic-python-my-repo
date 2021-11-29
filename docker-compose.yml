@@ -1,18 +1,18 @@
 version: "3"
 services:
 
-  app:
+  app: 
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
       - postgres
-    environment:
-      - DB_HOST=postgres
+    environment: 
+      - DB_HOST=postgres  (4)
       - DB_PASSWORD=abc123
       - API_HOST=app
-      - PYTHONDONTWRITEBYTECODE=1
-    volumes:
+      - PYTHONDONTWRITEBYTECODE=1  
+    volumes: 
       - ./src:/src
       - ./tests:/tests
     ports:
@@ -20,12 +20,9 @@ services:
 
 
   postgres:
-    image: postgres:9.6
+    image: postgres:9.6 
     environment:
       - POSTGRES_USER=allocation
       - POSTGRES_PASSWORD=abc123
-    # restart: always
-    # volumes:
-    #   - ./postgres-data:/var/lib/postgresql/data
     ports:
       - "54321:5432"
